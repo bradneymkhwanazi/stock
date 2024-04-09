@@ -4,28 +4,24 @@ from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-def scrape_stock_prices():
-    url = 'http://finance.yahoo.com/'
+def get_stock_prices():
+    url = "https://finance.yahoo.com/"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    table = soup.find('table', class_='tablesorter')
+    stocks_data = []
 
-    headers = []
-    data = []
+    for row in soup.select('.yfinlist tbody tr'):
+        name = row.select_one('.data-col1').get_text(strip=True)
+        price = row.select_one('.data-col2 span').get_text(strip=True)
+        change = row.select_one('.data-col4 span').get_text(strip=True)
+        stocks_data.append({'name': name, 'price': price, 'change': change})
 
-    if table:
-        for row in table.find_all('tr'):
-            columns = row.find_all('td')
-            if len(columns) == 2:
-                headers.append(columns[0].get_text().strip())
-                data.append(columns[1].get_text().strip())
-
-    return headers, data
+    return stocks_data
 
 @app.route('/')
 def index():
-    headers, data = scrape_stock_prices()
-    return render_template('index.html', headers=headers, data=data)
+    stocks = get_stock_prices()
+    return render_template('index.html', stocks=stocks)
 
 if __name__ == '__main__':
     app.run(port=8080)

@@ -10,9 +10,9 @@
             width: 50%;
         }
         th, td {
-            border: 1px solid black;
             padding: 8px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
         th {
             background-color: #f2f2f2;
@@ -20,8 +20,8 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        tr:nth-child(odd) {
-            background-color: #ffffff;
+        tr:hover {
+            background-color: #ddd;
         }
         .positive {
             color: green;
@@ -29,7 +29,7 @@
         .negative {
             color: red;
         }
-        .neutral {
+        .nochange {
             color: yellow;
         }
     </style>
@@ -38,16 +38,23 @@
     <h1>Stock Prices</h1>
     <table>
         <tr>
-            <th>Stock</th>
+            <th>Name</th>
             <th>Price</th>
+            <th>Change</th>
         </tr>
-        {% for header, value in zip(headers, data) %}
-            <tr>
-                <td>{{ header }}</td>
-                <td class="{% if value.startswith('-') %}negative{% elif value.startswith('+') %}positive{% else %}neutral{% endif %}">{{ value }}</td>
-            </tr>
+        {% for stock in stocks %}
+        <tr>
+            <td>{{ stock['name'] }}</td>
+            <td>{{ stock['price'] }}</td>
+            {% if stock['change'][0] == '+' %}
+                <td class="positive">{{ stock['change'] }}</td>
+            {% elif stock['change'][0] == '-' %}
+                <td class="negative">{{ stock['change'] }}</td>
+            {% else %}
+                <td class="nochange">{{ stock['change'] }}</td>
+            {% endif %}
+        </tr>
         {% endfor %}
     </table>
 </body>
 </html>
-
