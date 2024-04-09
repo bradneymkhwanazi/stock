@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 app = Flask(__name__)
 
 def scrape_stock_prices():
-    url = 'https://www.easyequities.co.za/'
+    url = 'http://finance.yahoo.com/'
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     table = soup.find('table', class_='tablesorter')
