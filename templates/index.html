@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Prices</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .positive {
+            color: green;
+        }
+        .negative {
+            color: red;
+        }
+        .neutral {
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Prices</h1>
+    <table>
+        <tr>
+            <th>Stock</th>
+            <th>Price</th>
+        </tr>
+        {% for header, value in zip(headers, data) %}
+            <tr>
+                <td>{{ header }}</td>
+                <td class="{% if value.startswith('-') %}negative{% elif value.startswith('+') %}positive{% else %}neutral{% endif %}">{{ value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
 
